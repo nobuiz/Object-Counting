@@ -1,15 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href ="style.css" />
-    <script src="script.js"></script>
-    <title>Object Counting</title>
-
-    
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Object Counting AI</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
 </head>
 <body>
-    
+  <nav class="navbar">
+    <div class="logo">
+      <div class="logo-icon">AI</div>
+      <span>ObjectCount</span>
+    </div>
+
+    <div class="nav-links">
+      <a href="#">Home</a>
+      <a href="#">How it Works</a>
+      <a href="#">Dashboard</a>
+      <a href="#">Contact</a>
+    </div>
+
+    <button class="nav-btn">Try Demo</button>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-text">
+      <p class="tag">AI-Powered Object Detection</p>
+      <h1>Count objects from images in seconds.</h1>
+      <p class="description">
+        Upload an image and let AI detect, classify, and count objects with a clean visual report.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="#upload-section" class="primary-btn">Start Counting</a>
+        <button class="secondary-btn">View Demo</button>
+      </div>
+    </div>
+
+    <div class="hero-card">
+      <div class="glass-card">
+        <p>Total Objects</p>
+        <h2 id="heroCount">0</h2>
+        <span>Ready for analysis</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="upload-section" class="dashboard">
+      <div class="upload-panel">
+        <h2>Upload Image</h2>
+        <p>Choose an image for AI object counting.</p>
+
+        <div class="upload-box" id="uploadBox">
+          <input type="file" id="fileInput" accept="image/*" hidden />
+          <div class="upload-icon">⬆</div>
+          <h3>Drag & drop image here</h3>
+          <p>or click to browse files</p>
+        </div>
+
+        <div class="settings">
+          <label for="confidence">Confidence Threshold</label>
+          <input type="range" id="confidence" min="10" max="100" value="75" />
+          <span id="confidenceValue">75%</span>
+        </div>
+
+        <button class="analyze-btn" id="analyzeBtn">Run AI Count</button>
+        <button class="clear-btn" id="clearBtn">Clear</button>
+      </div>
+
+      <div class="preview-panel">
+        <div class="preview-header">
+          <h2>Detection Preview</h2>
+          <span id="statusBadge">Waiting</span>
+        </div>
+
+        <div class="image-preview" id="imagePreview">
+          <p>No image uploaded yet</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="results">
+      <div class="result-card">
+        <p>Total Objects</p>
+        <h3 id="totalObjects">0</h3>
+      </div>
+
+      <div class="result-card">
+        <p>Detected Classes</p>
+        <h3 id="detectedClasses">0</h3>
+      </div>
+
+      <div class="result-card">
+        <p>Average Confidence</p>
+        <h3 id="avgConfidence">0%</h3>
+      </div>
+    </section>
+
+    <section class="table-section">
+      <h2>Counting Results</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Object</th>
+            <th>Count</th>
+            <th>Confidence</th>
+          </tr>
+        </thead>
+        <tbody id="resultTable">
+          <tr>
+            <td colspan="3">No results yet</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
 </body>
 </html>
