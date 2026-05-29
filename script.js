@@ -13,7 +13,10 @@ const detectedClasses = document.getElementById("detectedClasses");
 const avgConfidence = document.getElementById("avgConfidence");
 const heroCount = document.getElementById("heroCount");
 const resultTable = document.getElementById("resultTable");
+const historyList = document.getElementById("historyList");
+const clearHistoryBtn = document.getElementById("clearHistoryBtn");
 
+let analysisHistory = [];
 let uploadedImage = null;
 
 const demoObjects = [
@@ -100,6 +103,7 @@ analyzeBtn.addEventListener("click", () => {
     const results = generateDemoResults();
     displayResults(results);
     drawDetectionBoxes(results);
+    addToHistory(results);
 
     statusBadge.textContent = "Completed";
     statusBadge.classList.add("done");
@@ -213,4 +217,88 @@ function shuffleArray(array) {
 
 function randomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+if (clearHistoryBtn) {
+  clearHistoryBtn.addEventListener("click", () => {
+    analysisHistory = [];
+    renderHistory();
+  });
+}
+
+function addToHistory(results) {
+  if (!historyList) return;
+
+  const total = results.reduce((sum, item) => sum + item.count, 0);
+
+  const confidenceAverage = Math.round(
+    results.reduce((sum, item) => sum + item.confidence, 0) / results.length
+  );
+
+  const historyItem = {
+    id: analysisHistory.length + 1,
+    time: new Date().toLocaleString(),
+    total,
+    classes: results.length,
+    confidence: confidenceAverage,
+    objects: results
+  };
+
+  analysisHistory.unshift(historyItem);
+  renderHistory();
+}
+
+function renderHistory() {
+  if (!historyList) return;
+
+  if (analysisHistory.length === 0) {
+    historyList.innerHTML = `
+      <div class="empty-history">
+        <h3>No history yet</h3>
+        <p>Upload an image and run AI Count to see history here.</p>
+      </div>
+    `;
+    return;
+  }
+
+  historyList.innerHTML = "";
+
+  analysisHistory.forEach((item) => {
+    const card = document.createElement("div");
+    card.className = "history-item";
+
+    const objectTags = item.objects
+      .map((object) => {
+        return `<span class="history-tag">${object.name}: ${object.count}</span>`;
+      })
+      .join("");
+
+    card.innerHTML = `
+      <div class="history-title">
+        <h3>Analysis #${item.id}</h3>
+        <p>${item.time}</p>
+      </div>
+
+      <div class="history-stat">
+        <h4>${item.total}</h4>
+        <p>Total Objects</p>
+      </div>
+
+      <div class="history-stat">
+        <h4>${item.classes}</h4>
+        <p>Detected Classes</p>
+      </div>
+
+      <div class="history-stat">
+        <h4>${item.confidence}%</h4>
+        <p>Avg Confidence</p>
+      </div>
+
+      <div class="history-tags">
+        ${objectTags}
+      </div>
+    `;
+
+    historyList.appendChild(card);
+  });
 }
